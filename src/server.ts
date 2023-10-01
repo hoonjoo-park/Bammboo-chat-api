@@ -8,12 +8,17 @@ const server: Server = new Server(app);
 const io: SocketIOServer = new SocketIOServer(server);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("🏄‍♂️ Chat server is running on port 3010");
+  res.send(`🏄‍♂️  Chat server is running on port ${PORT}`);
 });
 
 io.on("connection", (socket: Socket) => {
-  socket.on("onMessage", (msg: string) => {
-    io.emit("onMessage", msg);
+  socket.on("onMessage", (msg: any) => {
+    console.log(msg);
+    // io.emit("onMessage", msg);
+  });
+
+  socket.on("connect", () => {
+    console.log("user connected");
   });
 
   socket.on("disconnect", () => {
@@ -22,5 +27,5 @@ io.on("connection", (socket: Socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🏄‍♂️ Chat server is running on port ${PORT}`);
+  console.log(`🏄‍♂️  Chat server is running on port ${PORT}`);
 });
