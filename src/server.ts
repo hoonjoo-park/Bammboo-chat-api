@@ -2,6 +2,7 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { Server } from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
+import { authUser } from "./utils";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
@@ -20,8 +21,14 @@ app.get("/", (req: Request, res: Response) => {
   res.send(`🏄‍♂️  Chat server is running on port ${PORT}`);
 });
 
-io.on("connection", (socket: Socket) => {
-  console.log("🏓 Socket connected!");
+io.on("connection", async (socket: Socket) => {
+  const authToken = socket.handshake.query.token;
+
+  const user = await authUser(authToken as string);
+
+  if (!user) return;
+
+  console.log(`🏓 Socket connected! (name: ${user.name})`);
 
   socket.on("message", (msg: any) => {
     console.log(msg);
