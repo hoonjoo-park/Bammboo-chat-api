@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import { Server } from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { authUser } from "./utils";
+import { PrismaClient } from "bamboo-schema/node_modules/prisma/prisma-client";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
