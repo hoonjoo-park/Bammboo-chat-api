@@ -644,10 +644,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bamboo-schema@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/bamboo-schema/-/bamboo-schema-1.0.20.tgz#f87b773b53d91cd6e18ee56d3254363e1e83a22f"
-  integrity sha512-j4vvwdyOVjX0mmm0A2AkZdoPkOmnwr++cBRFXf7GTuW/wZGhi8qdWtmlPNlGOKF1lHeilNHVNFoYmKyQCFZZtg==
+bamboo-schema@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/bamboo-schema/-/bamboo-schema-1.0.21.tgz#5dc0e3c55debc152846a12df94e8396b6251b9b1"
+  integrity sha512-mAEa/UzHwucgRt7O+slOvqxvemTPv981hEOXLRPOHA61FL6jkzjWlG3rLv98YoAI6tuW9IbisjpCTEcn2mgXsA==
   dependencies:
     "@prisma/client" "^4.13.0"
     "@types/body-parser" "^1.19.2"
