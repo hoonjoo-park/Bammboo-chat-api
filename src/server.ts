@@ -2,7 +2,8 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { Server } from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
-import { authUser } from "./utils";
+import { authUser } from "./utils/auth";
+import { setHeaderToken } from "./utils/api";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
@@ -17,14 +18,16 @@ const io: SocketIOServer = new SocketIOServer(server, {
 
 app.use(cors());
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_: Request, res: Response) => {
   res.send(`🏄‍♂️  Chat server is running on port ${PORT}`);
 });
 
 io.on("connection", async (socket: Socket) => {
   const authToken = socket.handshake.query.token;
 
-  const user = await authUser(authToken as string);
+  setHeaderToken(authToken);
+
+  const user = await authUser();
 
   if (!user) return;
 
