@@ -26,9 +26,15 @@ export const setHeaderToken = (token: string | string[] | undefined) => {
 };
 
 export const getMe = async () => {
-  const { data } = await bambooApi.get("/user/me");
+  const { data: user } = await bambooApi.get("/user/me");
 
-  return data;
+  return user;
+};
+
+export const getChatRooms = async () => {
+  const { data: chatRooms } = await bambooApi.get("/chatRoom");
+
+  return chatRooms;
 };
 
 export default { bambooApi };
