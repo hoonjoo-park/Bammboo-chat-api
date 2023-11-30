@@ -37,4 +37,22 @@ export const getChatRooms = async () => {
   return chatRooms;
 };
 
+export const createChatRoom = async (userId: number) => {
+  const { data } = await bambooApi.post("/chatRoom", { userId });
+
+  return data;
+};
+
+export const updateLatestMessage = async (
+  chatRoomId: number,
+  latestMessageId: number
+) => {
+  const { data: chatRoom } = await bambooApi.patch(`/chatRoom/latest-message`, {
+    chatRoomId,
+    latestMessageId,
+  });
+
+  return chatRoom;
+};
+
 export default { bambooApi };

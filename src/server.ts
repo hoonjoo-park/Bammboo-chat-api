@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import { Server } from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { authUser } from "./utils/auth";
-import { getChatRooms, setHeaderToken } from "./utils/api";
+import { createChatRoom, getChatRooms, setHeaderToken } from "./utils/api";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
@@ -33,12 +33,26 @@ io.on("connection", async (socket: Socket) => {
 
   console.log(`🏓 Socket connected! (name: ${user.name})`);
 
+  socket.join(`user-${user.id}`);
+
   const chatRooms = await getChatRooms();
 
   socket.emit("chatRooms", chatRooms);
 
-  socket.on("message", (msg: any) => {
-    console.log(msg);
+  socket.on("joinRoom", (chatRoomId: string) => {
+    socket.join(chatRoomId);
+  });
+
+  socket.on("createChatRoom", async ({ userId }: { userId: string }) => {
+    const newChatRoom = await createChatRoom(Number(userId));
+
+    console.log(newChatRoom);
+
+    socket.emit("updateChatRoom", newChatRoom);
+  });
+
+  socket.on("message", async (chatRoomId: string, message: string) => {
+    io.to(chatRoomId).emit("message", user, message);
   });
 
   socket.on("disconnect", () => {
