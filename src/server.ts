@@ -2,8 +2,13 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { Server } from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
+import {
+  createChatRoom,
+  getChatRooms,
+  sendMessage,
+  setHeaderToken,
+} from "./utils/api";
 import { authUser } from "./utils/auth";
-import { createChatRoom, getChatRooms, setHeaderToken } from "./utils/api";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
@@ -43,16 +48,28 @@ io.on("connection", async (socket: Socket) => {
     socket.join(chatRoomId);
   });
 
+  // * Create a new chat room
   socket.on("createChatRoom", async ({ userId }: { userId: string }) => {
-    const newChatRoom = await createChatRoom(Number(userId));
+    try {
+      const newChatRoom = await createChatRoom(Number(userId));
 
-    console.log(newChatRoom);
-
-    socket.emit("updateChatRoom", newChatRoom);
+      socket.emit("updateChatRoom", newChatRoom);
+    } catch (error) {
+      socket.emit("error", error);
+      console.error(error);
+    }
   });
 
+  // * Send a message
   socket.on("message", async (chatRoomId: string, message: string) => {
-    io.to(chatRoomId).emit("message", user, message);
+    if (!io.sockets.adapter.rooms.get(chatRoomId)) {
+      socket.emit("error", "Chat room not found");
+      return;
+    }
+
+    const newMessage = await sendMessage(Number(chatRoomId), message);
+
+    io.to(chatRoomId).emit("message", newMessage);
   });
 
   socket.on("disconnect", () => {

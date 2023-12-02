@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Message } from "../types";
 
 const bambooApi = axios.create({
   baseURL: "http://localhost:3000",
@@ -41,6 +42,18 @@ export const createChatRoom = async (userId: number) => {
   const { data } = await bambooApi.post("/chatRoom", { userId });
 
   return data;
+};
+
+export const sendMessage = async (
+  chatRoomId: number,
+  message: string
+): Promise<Message> => {
+  const { data: newMessage } = await bambooApi.post<Message>("/chat", {
+    chatRoomId,
+    message,
+  });
+
+  return newMessage;
 };
 
 export const updateLatestMessage = async (
