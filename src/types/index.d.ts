@@ -3,7 +3,7 @@ export type Nullable<T> = T | null;
 export interface Profile {
   id: number;
   userId: number;
-  profileImage?: string;
+  profileImage: string | null;
   username: string;
 }
 
@@ -12,5 +12,5 @@ export interface Message {
   chatRoomId: number;
   content: string;
   createdAt: string;
-  userProfile: Profile;
+  senderProfile: Profile;
 }
