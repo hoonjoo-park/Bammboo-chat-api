@@ -14,3 +14,16 @@ export interface Message {
   createdAt: string;
   senderProfile: Profile;
 }
+
+export interface ChatRoom {
+  id: number;
+  senderProfile: Profile;
+  lastMessage: Message | null;
+  unReadMessageCount: number;
+  updatedAt: string;
+}
+
+export interface MessageProp {
+  chatRoomId: string;
+  message: string;
+}

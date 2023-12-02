@@ -9,6 +9,7 @@ import {
   setHeaderToken,
 } from "./utils/api";
 import { authUser } from "./utils/auth";
+import { ChatRoom, MessageProp } from "./types";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
@@ -42,19 +43,16 @@ io.on("connection", async (socket: Socket) => {
 
   const chatRooms = await getChatRooms();
 
+  socket.join(chatRooms.map((chatRoom: ChatRoom) => chatRoom.id));
+
   socket.emit("chatRooms", chatRooms);
-
-  socket.on("joinRoom", ({ chatRoomId }: { chatRoomId: string }) => {
-    console.log(`🧩 Socket joined room ${chatRoomId}`);
-
-    socket.join(chatRoomId);
-  });
 
   // * Create a new chat room
   socket.on("createChatRoom", async ({ userId }: { userId: string }) => {
     try {
       const newChatRoom = await createChatRoom(Number(userId));
 
+      socket.join(newChatRoom.id);
       socket.emit("updateChatRoom", newChatRoom);
     } catch (error) {
       socket.emit("error", error);
@@ -63,7 +61,7 @@ io.on("connection", async (socket: Socket) => {
   });
 
   // * Send a message
-  socket.on("message", async (chatRoomId: string, message: string) => {
+  socket.on("message", async ({ chatRoomId, message }: MessageProp) => {
     if (!io.sockets.adapter.rooms.get(chatRoomId)) {
       socket.emit("error", "Chat room not found");
       return;
