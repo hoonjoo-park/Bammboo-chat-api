@@ -44,7 +44,9 @@ io.on("connection", async (socket: Socket) => {
 
   socket.emit("chatRooms", chatRooms);
 
-  socket.on("joinRoom", (chatRoomId: string) => {
+  socket.on("joinRoom", ({ chatRoomId }: { chatRoomId: string }) => {
+    console.log(`🧩 Socket joined room ${chatRoomId}`);
+
     socket.join(chatRoomId);
   });
 
