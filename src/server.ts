@@ -5,6 +5,7 @@ import { Socket, Server as SocketIOServer } from "socket.io";
 import {
   createChatRoom,
   getChatRooms,
+  getMessages,
   sendMessage,
   setHeaderToken,
 } from "./utils/api";
@@ -25,7 +26,7 @@ const io: SocketIOServer = new SocketIOServer(server, {
 app.use(cors());
 
 app.get("/", (_: Request, res: Response) => {
-  res.send(`🏄‍♂️  Chat server is running on port ${PORT}`);
+  res.send(`🏄‍♂️ Chat server is running on port ${PORT}`);
 });
 
 io.on("connection", async (socket: Socket) => {
@@ -70,6 +71,14 @@ io.on("connection", async (socket: Socket) => {
     const newMessage = await sendMessage(Number(chatRoomId), message);
 
     io.to(chatRoomId).emit("message", newMessage);
+  });
+
+  socket.on("enterRoom", async ({ chatRoomId }: { chatRoomId: string }) => {
+    console.log(`⚡️ User Entered the Room ${chatRoomId}`);
+
+    const initialMessages = await getMessages(Number(chatRoomId), 1);
+
+    socket.emit("enterRoom", initialMessages);
   });
 
   socket.on("disconnect", () => {

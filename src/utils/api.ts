@@ -68,4 +68,14 @@ export const updateLatestMessage = async (
   return chatRoom;
 };
 
+export const getMessages = async (chatRoomId: number, page?: number) => {
+  const { data: messages } = await bambooApi.get(`/chat/${chatRoomId}`, {
+    params: {
+      page: page || 1,
+    },
+  });
+
+  return messages;
+};
+
 export default { bambooApi };
