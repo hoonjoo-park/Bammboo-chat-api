@@ -76,7 +76,7 @@ io.on("connection", async (socket: Socket) => {
   socket.on("enterRoom", async ({ chatRoomId }: { chatRoomId: string }) => {
     console.log(`⚡️ User Entered the Room ${chatRoomId}`);
 
-    const initialMessages = await getMessages(Number(chatRoomId), 1);
+    const initialMessages = await getMessages(Number(chatRoomId));
 
     socket.emit("enterRoom", initialMessages);
   });
