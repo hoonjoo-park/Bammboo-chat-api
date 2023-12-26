@@ -2,6 +2,7 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { Server } from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
+import { ChatRoom, MessageProp } from "./types";
 import {
   createChatRoom,
   getChatRooms,
@@ -10,7 +11,6 @@ import {
   setHeaderToken,
 } from "./utils/api";
 import { authUser } from "./utils/auth";
-import { ChatRoom, MessageProp } from "./types";
 
 const PORT: number = Number(process.env.PORT) || 3090;
 const app = express();
